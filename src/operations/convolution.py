@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def convolve(image: np.ndarray, kernel: np.ndarray, padding: int = 0) -> np.ndarray:
+def convolve_2d(image: np.ndarray, kernel: np.ndarray, padding: int = 0) -> np.ndarray:
     kernel_height, kernel_width = kernel.shape
     
     if padding < 0:
@@ -10,8 +10,8 @@ def convolve(image: np.ndarray, kernel: np.ndarray, padding: int = 0) -> np.ndar
         padding_height = (kernel_height - 1) // 2
         padding_width = (kernel_width - 1) // 2
         image = np.pad(image, pad_width=(padding_height, padding_width), mode='constant', constant_values=0)
-
-    image = np.pad(image, padding, mode='constant', constant_values=0)    
+    else:
+        image = np.pad(image, padding, mode='constant', constant_values=0)    
 
     image_height, image_width = image.shape
 
@@ -27,4 +27,19 @@ def convolve(image: np.ndarray, kernel: np.ndarray, padding: int = 0) -> np.ndar
             region = image[y : y + kernel_height, x : x + kernel_width]
             output[y, x] = np.sum(region * kernel)
 
+    return output
+
+def convolve_3d(image: np.ndarray, kernel: np.ndarray, padding: int = 0) -> np.ndarray:
+    image_height, image_width, channels = image.shape
+
+    red_channel = image[:, :, 0]
+    green_channel = image[:, :, 1]
+    blue_channel = image[:, :, 2]
+
+    red_output = convolve_2d(red_channel, kernel, padding)
+    green_output = convolve_2d(green_channel, kernel, padding)
+    blue_output = convolve_2d(blue_channel, kernel, padding)
+
+    output = np.stack((red_output, green_output, blue_output), axis=-1)
+    
     return output
