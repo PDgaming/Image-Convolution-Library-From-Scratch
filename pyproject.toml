@@ -1,10 +1,11 @@
 [project]
 name = "image-convolution"
-version = "0.0.4"
+version = "0.0.7"
 description = "A simple image convolution library."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "matplotlib>=3.11.2",
     "numpy>=2.5.4",
+    "pillow>=13.0.0",
 ]
